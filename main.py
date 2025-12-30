@@ -35,15 +35,24 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
+
         screen.fill("black")
         updatable.update(dt)
+
         for obj in asteroids:
             if obj.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit(0)
+            for shot in shots:
+                if shot.collides_with(obj):
+                    log_event("asteroid_shot")
+                    shot.kill()
+                    obj.split()
+
         for obj in drawable:
             obj.draw(screen)
+
         pygame.display.flip()
         ms = clock.tick(60)
         dt = ms/1000
